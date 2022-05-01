@@ -7,7 +7,10 @@ import { Todo } from '../types';
 interface Props {
   todo: Todo;
   deleteTodo: (idToDelete: number) => Promise<void>;
-  toggleTodoComplete: (todoId: number, complete: boolean) => Promise<void>;
+  toggleTodoComplete: (arg: {
+    todoId: number;
+    complete: boolean;
+  }) => Promise<void>;
 }
 
 const TodoItem: React.FC<Props> = ({
@@ -26,7 +29,7 @@ const TodoItem: React.FC<Props> = ({
         <HStack>
           <Checkbox
             isChecked={complete}
-            onChange={() => toggleTodoComplete(id, complete)}
+            onChange={() => toggleTodoComplete({ todoId: id, complete })}
           />
           <IconButton
             aria-label="delete"
