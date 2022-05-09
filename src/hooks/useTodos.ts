@@ -1,7 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
-import axios from 'axios';
-
 import { Todo } from '../types';
 
 import {
