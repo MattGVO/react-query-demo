@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import axios from 'axios';
-
 import TodoContext from './TodoContext';
 import { Todo } from '../types';
+import API from '../services/API';
+import {
+  fetchTodos,
+  postTodo,
+  updateTodo,
+  deleteTodo as destroyTodo,
+} from '../services/todos';
 
 interface Props {
   children?: React.ReactNode;
@@ -13,32 +18,29 @@ const TodoProvider = ({ children }: Props) => {
   const [todos, setTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const { data } = await axios.get('http://localhost:5000/todos');
+    const fetchAndSetTodos = async () => {
+      const res = await fetchTodos();
 
-      setTodos(data);
+      setTodos(res);
     };
 
-    fetchTodos();
+    fetchAndSetTodos();
   }, []);
 
   const addTodo = async (text: string) => {
-    const { data } = await axios.post('http://localhost:5000/todos', {
-      text,
-      complete: false,
-    });
+    const newTodo = await postTodo(text);
 
-    setTodos(todos => [...todos, data]);
+    setTodos(todos => [...todos, newTodo]);
   };
 
   const deleteTodo = async (idToDelete: number) => {
-    await axios.delete(`http://localhost:5000/todos/${idToDelete}`);
+    await destroyTodo(idToDelete);
 
     setTodos(todos => todos.filter(({ id }) => id !== idToDelete));
   };
 
   const toggleTodoComplete = async (todoId: number, complete: boolean) => {
-    await axios.patch(`http://localhost:5000/todos/${todoId}`, {
+    await updateTodo(todoId, {
       complete: !complete,
     });
 
