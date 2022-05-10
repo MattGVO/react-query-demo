@@ -12,7 +12,11 @@ import {
 export default () => {
   const queryClient = useQueryClient();
 
-  const { data: todos = [] } = useQuery<Todo[]>('todos', fetchTodos);
+  const {
+    data: todos = [],
+    isFetching,
+    status,
+  } = useQuery<Todo[]>('todos', fetchTodos);
 
   const { mutateAsync: addTodo } = useMutation(postTodo, {
     // use onSuccess when you need the data return from the mutation function
@@ -53,5 +57,5 @@ export default () => {
     }
   );
 
-  return { addTodo, todos, deleteTodo, toggleTodoComplete };
+  return { addTodo, todos, deleteTodo, toggleTodoComplete, isFetching, status };
 };
