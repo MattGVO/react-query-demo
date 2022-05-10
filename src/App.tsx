@@ -14,12 +14,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <main
         style={{
-          alignItems: 'center',
           boxSizing: 'border-box',
           display: 'flex',
           height: '100vh',
           justifyContent: 'center',
-          padding: '20vh',
+          padding: '10vh',
           width: '100vw',
         }}
       >
