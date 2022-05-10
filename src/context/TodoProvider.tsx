@@ -35,7 +35,7 @@ const TodoProvider = ({ children }: Props) => {
     const newTodo = await postTodo(text);
 
     setTodos(todos => [...todos, newTodo]);
-    setIsLoading(false);
+    setIsUpdating(false);
   };
 
   const deleteTodo = async (idToDelete: number) => {
