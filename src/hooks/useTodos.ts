@@ -12,7 +12,11 @@ import {
 export default () => {
   const queryClient = useQueryClient();
 
-  const { data: todos = [] } = useQuery<Todo[]>('todos', fetchTodos);
+  const {
+    data: todos = [],
+    status,
+    isFetching,
+  } = useQuery<Todo[]>('todos', fetchTodos);
 
   const { mutateAsync: addTodo } = useMutation(postTodo, {
     onSuccess: () => {
@@ -39,5 +43,5 @@ export default () => {
     }
   );
 
-  return { addTodo, todos, deleteTodo, toggleTodoComplete };
+  return { addTodo, todos, deleteTodo, toggleTodoComplete, status, isFetching };
 };
