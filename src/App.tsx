@@ -1,30 +1,34 @@
 import { VStack } from '@chakra-ui/react';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 
-import TodoProvider from './context/TodoProvider';
+import { ReactQueryDevtools } from 'react-query/devtools';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <main
-      style={{
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        display: 'flex',
-        height: '100vh',
-        justifyContent: 'center',
-        padding: '20vh',
-        width: '100vw',
-      }}
-    >
-      <VStack>
-        <TodoProvider>
+    <QueryClientProvider client={queryClient}>
+      <main
+        style={{
+          boxSizing: 'border-box',
+          display: 'flex',
+          height: '100vh',
+          justifyContent: 'center',
+          padding: '10vh',
+          width: '100vw',
+        }}
+      >
+        <VStack>
           <TodoForm />
           <TodoList />
-        </TodoProvider>
-      </VStack>
-    </main>
+        </VStack>
+      </main>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 }
 
