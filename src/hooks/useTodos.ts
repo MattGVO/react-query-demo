@@ -15,18 +15,15 @@ export default () => {
   const { data: todos = [] } = useQuery<Todo[]>('todos', fetchTodos);
 
   const { mutateAsync: addTodo } = useMutation(postTodo, {
-    // use onSuccess when you need the data return from the mutation function
-    onSuccess: data => {
-      queryClient.setQueryData('todos', todos => [...(todos as Todo[]), data]);
+    onSuccess: () => {
+      queryClient.invalidateQueries('todos');
     },
   });
 
   const { mutateAsync: deleteTodo } = useMutation(destroyTodo, {
-    // use onMutate when you need the data passed into the mutation function
-    onMutate: (idToDelete: number) =>
-      queryClient.setQueryData<Todo[]>('todos', (todos = []) =>
-        todos.filter(({ id }) => id !== idToDelete)
-      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries('todos');
+    },
   });
 
   const { mutateAsync: toggleTodoComplete } = useMutation(
@@ -36,19 +33,8 @@ export default () => {
       });
     },
     {
-      onMutate: ({
-        todoId,
-        complete,
-      }: {
-        todoId: number;
-        complete: boolean;
-      }) => {
-        queryClient.setQueryData<Todo[]>('todos', (todos = []) =>
-          todos.map(todo => {
-            const { id } = todo;
-            return id === todoId ? { ...todo, complete: !complete } : todo;
-          })
-        );
+      onSuccess: () => {
+        queryClient.invalidateQueries('todos');
       },
     }
   );
