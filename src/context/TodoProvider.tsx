@@ -16,30 +16,38 @@ interface Props {
 
 const TodoProvider = ({ children }: Props) => {
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const fetchAndSetTodos = async () => {
       const res = await fetchTodos();
 
       setTodos(res);
+      setIsLoading(false);
     };
 
     fetchAndSetTodos();
   }, []);
 
   const addTodo = async (text: string) => {
+    setIsUpdating(true);
     const newTodo = await postTodo(text);
 
     setTodos(todos => [...todos, newTodo]);
+    setIsLoading(false);
   };
 
   const deleteTodo = async (idToDelete: number) => {
+    setIsUpdating(true);
     await destroyTodo(idToDelete);
 
     setTodos(todos => todos.filter(({ id }) => id !== idToDelete));
+    setIsUpdating(false);
   };
 
   const toggleTodoComplete = async (todoId: number, complete: boolean) => {
+    setIsUpdating(true);
     await updateTodo(todoId, {
       complete: !complete,
     });
@@ -51,11 +59,19 @@ const TodoProvider = ({ children }: Props) => {
         return id === todoId ? { ...todo, complete: !complete } : todo;
       })
     );
+    setIsUpdating(false);
   };
 
   return (
     <TodoContext.Provider
-      value={{ todos, addTodo, toggleTodoComplete, deleteTodo }}
+      value={{
+        todos,
+        addTodo,
+        toggleTodoComplete,
+        deleteTodo,
+        isLoading,
+        isUpdating,
+      }}
     >
       {children}
     </TodoContext.Provider>

@@ -8,12 +8,14 @@ interface Props {
   todo: Todo;
   deleteTodo: (idToDelete: number) => Promise<void>;
   toggleTodoComplete: (todoId: number, complete: boolean) => Promise<void>;
+  isUpdating?: boolean;
 }
 
 const TodoItem: React.FC<Props> = ({
   todo,
   deleteTodo,
   toggleTodoComplete,
+  isUpdating,
 }) => {
   const { complete, id, text } = todo;
 
@@ -27,6 +29,7 @@ const TodoItem: React.FC<Props> = ({
           <Checkbox
             isChecked={complete}
             onChange={() => toggleTodoComplete(id, complete)}
+            disabled={isUpdating}
           />
           <IconButton
             aria-label="delete"
@@ -34,6 +37,7 @@ const TodoItem: React.FC<Props> = ({
             onClick={() => deleteTodo(id)}
             icon={<MdDeleteForever />}
             variant="link"
+            disabled={isUpdating}
           />
         </HStack>
       </HStack>

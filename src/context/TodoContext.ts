@@ -7,6 +7,8 @@ interface ITodoContext {
   addTodo: (text: string) => Promise<void>;
   deleteTodo: (idToDelete: number) => Promise<void>;
   toggleTodoComplete: (todoId: number, complete: boolean) => Promise<void>;
+  isLoading: boolean;
+  isUpdating: boolean;
 }
 
 const TodoContext = React.createContext<ITodoContext>({
@@ -14,6 +16,8 @@ const TodoContext = React.createContext<ITodoContext>({
   addTodo: async (text: string) => {},
   deleteTodo: async (idToDelete: number) => {},
   toggleTodoComplete: async (todoId: number, complete: boolean) => {},
+  isLoading: true,
+  isUpdating: false,
 });
 
 export default TodoContext;
